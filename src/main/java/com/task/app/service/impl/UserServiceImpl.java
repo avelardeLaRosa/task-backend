@@ -8,7 +8,7 @@ import com.task.app.util.ApiResponse;
 import com.task.app.util.Date;
 import com.task.app.util.Pagination;
 import com.task.app.util.Response;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

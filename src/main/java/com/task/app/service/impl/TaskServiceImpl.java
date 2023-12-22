@@ -1,7 +1,6 @@
 package com.task.app.service.impl;
 
 import com.task.app.dto.TaskDTO;
-import com.task.app.dto.UserDTO;
 import com.task.app.entities.TaskEntity;
 import com.task.app.entities.UserEntity;
 import com.task.app.repository.ITaskRepository;
@@ -11,7 +10,7 @@ import com.task.app.util.ApiResponse;
 import com.task.app.util.Date;
 import com.task.app.util.Pagination;
 import com.task.app.util.Response;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -50,14 +48,20 @@ public class TaskServiceImpl implements ITaskService {
         task.setTaskCode(IServiceConstants.generateCodeMaintenance(IServiceConstants.TASK_PREFIX, taskRepository.count() + 1, IServiceConstants.ENTITY_LENGTH_CODE));
         task.setCreateDate(Date.getCurrent(IServiceConstants.TIME_ZONE_DEFAULT));
         task.setStatus(IServiceConstants.CREATED);
-        task.setStatusOperation(IServiceConstants.ACTIVE);
         task.setUniqueIdentifier(UUID.randomUUID().toString());
-
         Optional<UserEntity> optionalUser = this.userRepository.findByUniqueIdentifierAndStatus(taskDTO.getUserDTO().getId(), IServiceConstants.CREATED);
         if (optionalUser.isEmpty()) {
             return getErrorApiResponse(400, IServiceConstants.USER_NOT_FOUND_MESSAGE);
         }
         task.setUserEntity(optionalUser.get());
+
+        if (taskDTO.getFechaInicio().after(new java.util.Date())) {
+            task.setStatusOperation(IServiceConstants.INACTIVE);
+        } else if (taskDTO.getFechaFin().before(new java.util.Date())) {
+            task.setStatusOperation(IServiceConstants.CLOSED);
+        } else {
+            task.setStatusOperation(IServiceConstants.ACTIVE);
+        }
         return saveEntityAndApiResponse(200, String.format(IServiceConstants.TASK_SAVED_MESSAGE, task.getTaskCode()), task);
     }
 
@@ -75,9 +79,15 @@ public class TaskServiceImpl implements ITaskService {
         }
         TaskEntity taskEntity = optionalTask.get();
         UserEntity userEntity = userFound.get();
-        if (!taskEntity.getStatusOperation().equals(IServiceConstants.CLOSED)) {
-            taskEntity.setStatusOperation(StringUtils.isEmpty(taskDTO.getStatusOperation()) ? null : taskEntity.getStatusOperation());
+
+        if (taskDTO.getFechaInicio().after(new java.util.Date()) && !taskEntity.getStatusOperation().equals(IServiceConstants.CLOSED)) {
+            taskEntity.setStatusOperation(IServiceConstants.INACTIVE);
+        } else if (taskDTO.getFechaFin().before(new java.util.Date()) && !taskEntity.getStatusOperation().equals(IServiceConstants.CLOSED)) {
+            taskEntity.setStatusOperation(IServiceConstants.CLOSED);
+        } else if (!taskEntity.getStatusOperation().equals(IServiceConstants.CLOSED)) {
+            taskEntity.setStatusOperation(IServiceConstants.ACTIVE);
         }
+
         taskEntity.setUpdateDate(Date.getCurrent(IServiceConstants.TIME_ZONE_DEFAULT));
         taskEntity.setDescripcion(StringUtils.isEmpty(taskDTO.getDescripcion()) ? null : taskEntity.getDescripcion());
         taskEntity.setFechaInicio(taskDTO.getFechaInicio() == null ? taskEntity.getFechaInicio() : taskDTO.getFechaInicio());

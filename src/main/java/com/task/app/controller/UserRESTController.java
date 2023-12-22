@@ -7,7 +7,7 @@ import com.task.app.util.Messages;
 import com.task.app.util.Pagination;
 import com.task.app.util.Response;
 import com.task.app.util.exception.GlobalException;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

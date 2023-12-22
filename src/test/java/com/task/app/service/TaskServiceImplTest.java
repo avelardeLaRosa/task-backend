@@ -10,7 +10,7 @@ import com.task.app.service.impl.TaskServiceImpl;
 import com.task.app.service.impl.UserServiceImpl;
 import com.task.app.util.ApiResponse;
 import com.task.app.util.Response;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

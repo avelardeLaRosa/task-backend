@@ -1,13 +1,12 @@
 package com.task.app.service;
 
 import com.task.app.dto.UserDTO;
-import com.task.app.entities.TaskEntity;
 import com.task.app.entities.UserEntity;
 import com.task.app.repository.IUserRepository;
 import com.task.app.service.impl.UserServiceImpl;
 import com.task.app.util.ApiResponse;
 import com.task.app.util.Response;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 

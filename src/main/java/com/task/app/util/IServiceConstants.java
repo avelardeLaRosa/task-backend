@@ -1,4 +1,4 @@
-package com.task.app.util.interfaces;
+package com.task.app.util;
 
 public final class IServiceConstants {
     private IServiceConstants() {

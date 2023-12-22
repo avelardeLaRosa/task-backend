@@ -1,9 +1,8 @@
 package com.task.app.repository;
 
 import com.task.app.TaskBackendApplication;
-import com.task.app.entities.TaskEntity;
 import com.task.app.entities.UserEntity;
-import com.task.app.util.interfaces.IServiceConstants;
+import com.task.app.util.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
