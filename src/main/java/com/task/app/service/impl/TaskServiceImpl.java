@@ -1,6 +1,7 @@
 package com.task.app.service.impl;
 
 import com.task.app.dto.TaskDTO;
+import com.task.app.dto.UserDTO;
 import com.task.app.entities.TaskEntity;
 import com.task.app.entities.UserEntity;
 import com.task.app.repository.ITaskRepository;
@@ -14,12 +15,19 @@ import com.task.app.util.interfaces.IServiceConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -103,8 +111,28 @@ public class TaskServiceImpl implements ITaskService {
 
     @Transactional(readOnly = true)
     @Override
-    public Pagination<TaskDTO> getPagination(Map<String, Object> parameters) {
-        return null;
+    public Pagination<TaskDTO> getPagination(Map<String, Object> parameters) throws ParseException {
+
+        Pagination<TaskDTO> pagination = new Pagination<>();
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(parameters.get(IServiceConstants.PAGE).toString()),
+                Integer.parseInt(parameters.get(IServiceConstants.SIZE).toString())
+        );
+        Page<TaskEntity> taskEntities = this.taskRepository.getTaskEntities(
+                IServiceConstants.CREATED,
+                StringUtils.isEmpty(parameters.get(IServiceConstants.F_INICIO).toString()) ? null : new SimpleDateFormat().parse(parameters.get(IServiceConstants.F_INICIO).toString()),
+                StringUtils.isEmpty(parameters.get(IServiceConstants.F_FIN).toString()) ? null : new SimpleDateFormat().parse(parameters.get(IServiceConstants.F_FIN).toString()),
+                StringUtils.isEmpty(parameters.get(IServiceConstants.STATUS_OP).toString()) ? null : parameters.get(IServiceConstants.STATUS_OP).toString(),
+                pageable
+        );
+
+        pagination.setList(taskEntities.getContent().stream().map(TaskEntity::getDTO).collect(Collectors.toList()));
+        pagination.setTotalPages(taskEntities.getTotalPages());
+        pagination.setPageNumber(taskEntities.getNumber());
+        pagination.setPageSize(taskEntities.getSize());
+        pagination.setTotalElements(taskEntities.getTotalElements());
+        pagination.setLastRow(taskEntities.isLast());
+        return pagination;
     }
 
     public ApiResponse<Response<TaskDTO>> getSucessApiResponse(Integer code, String message, TaskDTO data) {

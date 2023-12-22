@@ -23,6 +23,9 @@ public final class IServiceConstants {
     public static final String PAGE = "page";
     public static final String SIZE = "size";
     public static final String FILTER = "filter";
+    public static final String F_INICIO = "fechaInicio";
+    public static final String F_FIN = "fechaFin";
+    public static final String STATUS_OP = "statusOp";
     public static final String CARGO = "cargo";
     public static final String PAGE_NUMBER = "0";
     public static final String PAGE_SIZE = "10";
