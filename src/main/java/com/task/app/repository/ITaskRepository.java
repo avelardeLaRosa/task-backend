@@ -25,7 +25,7 @@ public interface ITaskRepository extends JpaRepository<TaskEntity, Integer> {
             value = "SELECT t FROM TaskEntity t " +
                     "where t.status = :status " +
                     "and (t.fechaInicio >= :fechaInicio or :fechaInicio is null) " +
-                    "and (t.fechaFin >= :fechaFin or :fechaFin is null) " +
+                    "and (t.fechaFin <= :fechaFin or :fechaFin is null) " +
                     "and (t.statusOperation = :statusOp or :statusOp is null) "
     )
     Page<TaskEntity> getTaskEntities(
