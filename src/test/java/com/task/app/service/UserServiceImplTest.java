@@ -187,12 +187,26 @@ class UserServiceImplTest {
 
         given(this.userRepository.findByDniAndStatus(userEntity.getDni(), IServiceConstants.CREATED))
                 .willReturn(Optional.empty());
+
         given(this.userRepository.save(any(UserEntity.class)))
                 .willReturn(userEntity);
 
-        ApiResponse<Response<UserDTO>> userDeleted = this.userService.delete(userEntity.getUniqueIdentifier());
+        ApiResponse<Response<UserDTO>> userSaved = this.userService.add(userEntity.getDTO());
+        assertThat(userSaved.getExitoso()).isTrue();
 
-        assertThat(userDeleted.getExitoso()).isFalse();
+        UserEntity newUser = new UserEntity();
+        newUser.setEntity(userSaved.getData().getT());
+        newUser.setStatus(IServiceConstants.DELETED);
+
+        given(this.userRepository.findByUniqueIdentifierAndStatus(newUser.getUniqueIdentifier(), IServiceConstants.CREATED))
+                .willReturn(Optional.of(newUser));
+
+        given(this.userRepository.save(any(UserEntity.class)))
+                .willReturn(newUser);
+
+        ApiResponse<Response<UserDTO>> userDeleted = this.userService.delete(newUser.getUniqueIdentifier());
+
+        assertThat(userDeleted.getExitoso()).isTrue();
         assertThat(userDeleted.getData().getT().getStatus()).isEqualTo(IServiceConstants.DELETED);
     }
 

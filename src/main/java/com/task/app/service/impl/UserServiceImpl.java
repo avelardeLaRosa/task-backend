@@ -121,7 +121,7 @@ public class UserServiceImpl implements IUserService {
         Page<UserEntity> userEntities = this.userRepository.getUserEntities(
                 IServiceConstants.CREATED,
                 parameters.get(IServiceConstants.FILTER).toString(),
-                StringUtils.isEmpty(parameters.get(IServiceConstants.FILTER).toString()) ? null : parameters.get(IServiceConstants.FILTER).toString(),
+                StringUtils.isEmpty(parameters.get(IServiceConstants.CARGO).toString()) ? null : parameters.get(IServiceConstants.CARGO).toString(),
                 pageable
         );
 

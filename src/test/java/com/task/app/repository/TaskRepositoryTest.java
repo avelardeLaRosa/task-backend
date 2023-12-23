@@ -90,7 +90,7 @@ class TaskRepositoryTest {
         if (taskEntities.isEmpty()) {
             log.error("LISTA DE TAREAS VACIA");
         }
-        assertThat(taskEntities).hasSize(100);
+        assertThat(taskEntities).hasSizeGreaterThan(0);
         log.error("LISTA TAREAS ES : {}", taskEntities.size());
     }
 

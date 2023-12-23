@@ -9,6 +9,7 @@ import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,7 +18,9 @@ public interface ITaskRepository extends JpaRepository<TaskEntity, Integer> {
     Optional<TaskEntity> findByUniqueIdentifierAndStatusOperationNotLike(String id, String status);
 
     Optional<TaskEntity> findByUniqueIdentifierAndStatus(String id, String status);
+    Integer countByStatus(String status);
 
+    List<TaskEntity> findAllByStatusAndStatusOperationNotLike(String status, String statusOp);
     @Query(
             value = "SELECT t FROM TaskEntity t " +
                     "where t.status = :status " +

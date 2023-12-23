@@ -31,7 +31,7 @@ public class UserRESTController {
     @GetMapping
     public ResponseEntity<ApiResponse<Response<UserDTO>>> getUsers(
             @RequestParam(value = IServiceConstants.FILTER, defaultValue = "", required = false) String filter,
-            @RequestParam(value = IServiceConstants.CARGO, required = false) String cargo,
+            @RequestParam(value = IServiceConstants.CARGO, defaultValue = "", required = false) String cargo,
             @RequestParam(value = IServiceConstants.PAGE, defaultValue = IServiceConstants.PAGE_NUMBER, required = false) String page,
             @RequestParam(value = IServiceConstants.SIZE, defaultValue = IServiceConstants.PAGE_SIZE, required = false) String size
     ) {
@@ -63,7 +63,7 @@ public class UserRESTController {
             }
             return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), userFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -79,9 +79,9 @@ public class UserRESTController {
             if (!userFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(userFound.getCode()), userFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), userFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.CREATED.getCode(), userFound.getMessages(), userFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -97,9 +97,9 @@ public class UserRESTController {
             if (!userFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(userFound.getCode()), userFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), userFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), userFound.getMessages(), userFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -115,9 +115,9 @@ public class UserRESTController {
             if (!userFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(userFound.getCode()), userFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), userFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().success(Messages.OK.getCode(), userFound.getMessages(), userFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<UserDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

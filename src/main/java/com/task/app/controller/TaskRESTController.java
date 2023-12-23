@@ -35,9 +35,9 @@ public class TaskRESTController {
     public ResponseEntity<ApiResponse<Response<TaskDTO>>> getTaks(
             @RequestParam(value = IServiceConstants.PAGE, defaultValue = IServiceConstants.PAGE_NUMBER, required = false) String page,
             @RequestParam(value = IServiceConstants.SIZE, defaultValue = IServiceConstants.PAGE_SIZE, required = false) String size,
-            @RequestParam(value = IServiceConstants.F_INICIO, required = false) String fechaInicio,
-            @RequestParam(value = IServiceConstants.F_FIN, required = false) String fechaFin,
-            @RequestParam(value = IServiceConstants.STATUS_OP, required = false) String statusOp
+            @RequestParam(value = IServiceConstants.F_INICIO, defaultValue = "", required = false) String fechaInicio,
+            @RequestParam(value = IServiceConstants.F_FIN, defaultValue = "", required = false) String fechaFin,
+            @RequestParam(value = IServiceConstants.STATUS_OP, defaultValue = "", required = false) String statusOp
     ) throws ParseException {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(IServiceConstants.PAGE, page);
@@ -66,9 +66,9 @@ public class TaskRESTController {
             if (!taskFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(taskFound.getCode()), taskFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), taskFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), taskFound.getMessages(), taskFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -84,9 +84,9 @@ public class TaskRESTController {
             if (!taskFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(taskFound.getCode()), taskFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), taskFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), taskFound.getMessages(), taskFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -102,9 +102,9 @@ public class TaskRESTController {
             if (!taskFound.getExitoso()) {
                 throw new GlobalException(String.valueOf(taskFound.getCode()), taskFound.getMessages());
             }
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), Messages.OK.getMessage(), taskFound.getData()), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().success(Messages.OK.getCode(), taskFound.getMessages(), taskFound.getData()), HttpStatus.OK);
         } catch (GlobalException g) {
-            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(Integer.parseInt(g.getCode()), g.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiResponse<Response<TaskDTO>>().failed(400, g.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

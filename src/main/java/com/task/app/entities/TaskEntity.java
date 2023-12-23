@@ -49,6 +49,7 @@ public class TaskEntity extends AuditoryEntity implements IDTOManagment<TaskDTO>
         taskDTO.setDeleteDate(getDeleteDate());
 
         taskDTO.setTaskCode(this.taskCode);
+        taskDTO.setStatusOperation(this.statusOperation);
         taskDTO.setDescripcion(this.descripcion);
         taskDTO.setFechaInicio(this.fechaInicio);
         taskDTO.setFechaFin(this.fechaFin);
@@ -68,6 +69,7 @@ public class TaskEntity extends AuditoryEntity implements IDTOManagment<TaskDTO>
         setDeleteDate(taskDTO.getDeleteDate());
 
         this.taskCode = taskDTO.getTaskCode();
+        this.statusOperation = taskDTO.getStatusOperation();
         this.descripcion = taskDTO.getDescripcion();
         this.fechaInicio = taskDTO.getFechaInicio();
         this.fechaFin = taskDTO.getFechaFin();

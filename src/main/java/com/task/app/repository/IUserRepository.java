@@ -19,8 +19,12 @@ public interface IUserRepository extends JpaRepository<UserEntity, Integer> {
     @Query(
             value = "SELECT u FROM UserEntity  u " +
                     "where u.status = :status " +
-                    "and ((u.dni like concat('%', :filter, '%')) or (u.nombre like concat('%', :filter, '%')) or (u.apellido like concat('%', :filter, '%'))) " +
-                    "and (u.cargo = :cargo or :cargo is null) "
+                    "and ( " +
+                    "(u.dni like concat('%', :filter, '%')) or " +
+                    "(u.nombre like concat('%', :filter, '%')) or " +
+                    "(u.apellido like concat('%', :filter, '%'))" +
+                    ") " +
+                    "and (:cargo is null OR u.cargo = :cargo) "
     )
     Page<UserEntity> getUserEntities(
             String status,

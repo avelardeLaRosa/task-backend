@@ -43,9 +43,10 @@ public class TaskServiceImpl implements ITaskService {
     @Transactional(rollbackFor = {RuntimeException.class})
     @Override
     public ApiResponse<Response<TaskDTO>> add(TaskDTO taskDTO) {
+        Integer count = this.taskRepository.countByStatus(IServiceConstants.CREATED);
         TaskEntity task = new TaskEntity();
         task.setEntity(taskDTO);
-        task.setTaskCode(IServiceConstants.generateCodeMaintenance(IServiceConstants.TASK_PREFIX, taskRepository.count() + 1, IServiceConstants.ENTITY_LENGTH_CODE));
+        task.setTaskCode(IServiceConstants.generateCodeMaintenance(IServiceConstants.TASK_PREFIX, count + 1, IServiceConstants.ENTITY_LENGTH_CODE));
         task.setCreateDate(Date.getCurrent(IServiceConstants.TIME_ZONE_DEFAULT));
         task.setStatus(IServiceConstants.CREATED);
         task.setUniqueIdentifier(UUID.randomUUID().toString());
@@ -89,9 +90,9 @@ public class TaskServiceImpl implements ITaskService {
         }
 
         taskEntity.setUpdateDate(Date.getCurrent(IServiceConstants.TIME_ZONE_DEFAULT));
-        taskEntity.setDescripcion(StringUtils.isEmpty(taskDTO.getDescripcion()) ? null : taskEntity.getDescripcion());
+        taskEntity.setDescripcion(!StringUtils.isEmpty(taskDTO.getDescripcion()) ? taskDTO.getDescripcion() : taskEntity.getDescripcion());
         taskEntity.setFechaInicio(taskDTO.getFechaInicio() == null ? taskEntity.getFechaInicio() : taskDTO.getFechaInicio());
-        taskEntity.setFechaInicio(taskDTO.getFechaFin() == null ? taskEntity.getFechaFin() : taskDTO.getFechaFin());
+        taskEntity.setFechaFin(taskDTO.getFechaFin() == null ? taskEntity.getFechaFin() : taskDTO.getFechaFin());
         taskEntity.setUserEntity(userEntity);
         return saveEntityAndApiResponse(200, String.format(IServiceConstants.TASK_UPDATED_MESSAGE, taskEntity.getTaskCode()), taskEntity);
     }
@@ -130,8 +131,8 @@ public class TaskServiceImpl implements ITaskService {
         );
         Page<TaskEntity> taskEntities = this.taskRepository.getTaskEntities(
                 IServiceConstants.CREATED,
-                StringUtils.isEmpty(parameters.get(IServiceConstants.F_INICIO).toString()) ? null : new SimpleDateFormat().parse(parameters.get(IServiceConstants.F_INICIO).toString()),
-                StringUtils.isEmpty(parameters.get(IServiceConstants.F_FIN).toString()) ? null : new SimpleDateFormat().parse(parameters.get(IServiceConstants.F_FIN).toString()),
+                StringUtils.isEmpty(parameters.get(IServiceConstants.F_INICIO).toString()) ? null : new SimpleDateFormat("yyyy/MM/dd").parse(parameters.get(IServiceConstants.F_INICIO).toString()),
+                StringUtils.isEmpty(parameters.get(IServiceConstants.F_FIN).toString()) ? null : new SimpleDateFormat("yyyy/MM/dd").parse(parameters.get(IServiceConstants.F_FIN).toString()),
                 StringUtils.isEmpty(parameters.get(IServiceConstants.STATUS_OP).toString()) ? null : parameters.get(IServiceConstants.STATUS_OP).toString(),
                 pageable
         );
